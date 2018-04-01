@@ -8,10 +8,16 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get -y install qt59base qt59declarative qt59multimedia
+  - sudo apt-get -y install qt59base qt59declarative qt59multimedia libtag1-dev
   - source /opt/qt*/bin/qt*-env.sh
 
 script:
+  - git clone https://github.com/space-santa/single-instance
+  - cd single-instance/
+  - qmake
+  - make -j$(nproc)
+  - sudo make install
+  - cd ..
   - qmake CONFIG+=release PREFIX=/usr
   - make -j$(nproc)
   - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/
